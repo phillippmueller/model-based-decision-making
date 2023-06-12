@@ -51,6 +51,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
                              6: PF for Dike ring 3
                              7: PF for Gelderland 
                              8: PF for Overijssel 
+                             9: PF for holistic 
 
     Notes
     -----
