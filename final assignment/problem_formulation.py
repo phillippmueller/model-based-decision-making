@@ -48,6 +48,9 @@ def get_model_for_problem_formulation(problem_formulation_id):
                              3: costs and casualties disaggregated over dike rings, and room for the river and evacuation costs
                              4: Expected damages, dike investment cost and casualties disaggregated over dike rings and room for the river and evacuation costs
                              5: disaggregate over time and space
+                             6: PF for Dike ring 3
+                             7: PF for Gelderland 
+                             8: PF for Overijssel 
 
     Notes
     -----
