@@ -461,8 +461,7 @@ def get_model_for_problem_formulation(problem_formulation_id):
 
         dike_model.outcomes = outcomes
 
-        #for outcome in outcomes:
-        #    print(outcome)
+   
 
     else:
         raise TypeError("unknown identifier")
@@ -473,4 +472,4 @@ def get_model_for_problem_formulation(problem_formulation_id):
 
 
 if __name__ == "__main__":
-    get_model_for_problem_formulation(7)
+    get_model_for_problem_formulation(3)
