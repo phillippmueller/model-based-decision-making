@@ -381,15 +381,15 @@ def get_model_for_problem_formulation(problem_formulation_id):
     
         outcomes = []
          #Damage  
-        damage_a3.extend(['A.3_Expected Annual Damage {}'.format(n)])
+        damage_a3.extend(['A.3_Expected Annual Damage'])
         #Casualties
-        casualties_a3.extend(['A.3_Expected Number of Deaths {}'.format(n)])
+        casualties_a3.extend(['A.3_Expected Number of Deaths'])
         #Costs
         for dike in function.dikelist:
-            dike_costs.extend(['{}_Dike Investment Costs {}'.format(dike, n)])
+            dike_costs.extend(['{}_Dike Investment Costs'.format(dike)])
 
-        rfr_costs.extend(['RfR Total Costs {}'.format(n)])
-        evacuation_costs.extend(['Expected Evacuation Costs {}'.format(n)])
+        rfr_costs.extend(['RfR Total Costs'])
+        evacuation_costs.extend(['Expected Evacuation Costs'])
 
         dike_model.outcomes = [
                 ScalarOutcome('A3 Expected Annual Damage',
@@ -481,17 +481,17 @@ def get_model_for_problem_formulation(problem_formulation_id):
         
         outcomes = []
         #Damage  
-        damage_a1_a2.extend(['A.1_Expected Annual Damage {}'.format(n), 'A.2_Expected Annual Damage {}'.format(n)])
-        damage_a3.extend(['A.3_Expected Annual Damage {}'.format(n)])
+        damage_a1_a2.extend(['A.1_Expected Annual Damage', 'A.2_Expected Annual Damage'])
+        damage_a3.extend(['A.3_Expected Annual Damage'])
         #Casualties
-        casualties_a1_a2.extend(['A.1_Expected Number of Deaths {}'.format(n), 'A.2_Expected Number of Deaths {}'.format(n)])
-        casualties_a3.extend(['A.3_Expected Number of Deaths {}'.format(n)])
+        casualties_a1_a2.extend(['A.1_Expected Number of Deaths', 'A.2_Expected Number of Deaths'])
+        casualties_a3.extend(['A.3_Expected Number of Deaths'])
         #Costs
         for dike in function.dikelist:
-            dike_costs.extend(['{}_Dike Investment Costs {}'.format(dike,n)
+            dike_costs.extend(['{}_Dike Investment Costs'.format(dike)
                                                 for dike in function.dikelist])
-        rfr_costs.extend(['RfR Total Costs {}'.format(n)])
-        evacuation_costs.extend(['Expected Evacuation Costs {}'.format(n)])
+        rfr_costs.extend(['RfR Total Costs'])
+        evacuation_costs.extend(['Expected Evacuation Costs'])
         dike_model.outcomes = [
                     ScalarOutcome('A1_2 Aggr Expected Annual Damage',
                           variable_name=[var for var in damage_a1_a2],
@@ -534,20 +534,20 @@ def get_model_for_problem_formulation(problem_formulation_id):
         
             
             #Damage
-        gelderland_expected_damage.extend(['A.1_Expected Annual Damage {}'.format(n), 'A.2_Expected Annual Damage {}'.format(n), 'A.3_Expected Annual Damage {}'.format(n)])
-        overijssel_expected_damage.extend(['A.4_Expected Annual Damage {}'.format(n), 'A.5_Expected Annual Damage {}'.format(n)])
+        gelderland_expected_damage.extend(['A.1_Expected Annual Damage', 'A.2_Expected Annual Damage', 'A.3_Expected Annual Damage'])
+        overijssel_expected_damage.extend(['A.4_Expected Annual Damage', 'A.5_Expected Annual Damage'])
             
             #Casualties
-        casualties.extend(['A.1_Expected Number of Deaths {}'.format(n), 'A.2_Expected Number of Deaths {}'.format(n), 'A.3_Expected Number of Deaths {}'.format(n),
-                              'A.4_Expected Number of Deaths {}'.format(n), 'A.5_Expected Number of Deaths {}'.format(n)])
+        casualties.extend(['A.1_Expected Number of Deaths', 'A.2_Expected Number of Deaths', 'A.3_Expected Number of Deaths',
+                              'A.4_Expected Number of Deaths', 'A.5_Expected Number of Deaths'])
             #Costs
         for dike in function.dikelist:
-            gelderland_dike_cost.extend(['{}_Dike Investment Costs {}'.format(dike,n)
+            gelderland_dike_cost.extend(['{}_Dike Investment Costs'.format(dike)
                                             for dike in function.dikelist[0:len(function.dikelist)-1]])
-            overijssel_dike_cost.extend(['{}_Dike Investment Costs {}'.format(dike,n)
+            overijssel_dike_cost.extend(['{}_Dike Investment Costs'.format(dike)
                                                 for dike in function.dikelist[4:5]])
-        rfr_costs.extend(['RfR Total Costs {}'.format(n)])
-        evacuation_costs.extend(['Expected Evacuation Costs {}'.format(n)])
+        rfr_costs.extend(['RfR Total Costs'])
+        evacuation_costs.extend(['Expected Evacuation Costs'])
         dike_model.outcomes = [
                     ScalarOutcome('Gelderland Expected Annual Damage',
                           variable_name=[var for var in gelderland_expected_damage],
