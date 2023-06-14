@@ -48,8 +48,8 @@ def get_model_for_problem_formulation(problem_formulation_id):
                              3: costs and casualties disaggregated over dike rings, and room for the river and evacuation costs
                              4: Expected damages, dike investment cost and casualties disaggregated over dike rings and room for the river and evacuation costs
                              5: disaggregate over time and space
-                             6:
-                             7:
+                             6: disaggregate over locations and outcomes
+                             7: specific to Dike Ring 3
 
     Notes
     -----
