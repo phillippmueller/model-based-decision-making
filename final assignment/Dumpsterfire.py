@@ -145,7 +145,7 @@ gammaPolicy = Policy('gamma_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2'
                                                 'A.5_DikeIncrease 2': random.randint(0, 10),
                                                 'EWS_DaysToThreat': random.randint(0, 4)})
 def main():
-    n_scenarios = 10000
+    n_scenarios = 1000
 
     ema_logging.log_to_stderr(ema_logging.INFO)
 
@@ -158,7 +158,7 @@ def main():
         experiments, outcomes = evaluator.perform_experiments(scenarios=n_scenarios, policies=[nullPolicy, alphaPolicy, betaPolicy, gammaPolicy])
 
     # Save the results
-    save_results([experiments, outcomes], './results/10000Scenarios_4RandomPolicies_PF6.tar.gz')
+    save_results([experiments, outcomes], './results/1000Scenarios_4Random_Policies_PF6.tar.gz')
 
 if __name__ == '__main__':
     freeze_support()
