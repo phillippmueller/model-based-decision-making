@@ -90,7 +90,7 @@ alphaPolicy = Policy('alpha_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                                 'A.3_DikeIncrease 2': random.randint(0, 10),
                                                 'A.4_DikeIncrease 2': random.randint(0, 10),
                                                 'A.5_DikeIncrease 2': random.randint(0, 10),
-                                                'EWS_DaysToThreat': random.randint(0, 15)})
+                                                'EWS_DaysToThreat': random.randint(0, 4)})
 
 betaPolicy = Policy('beta_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                               '3_RfR 1': random.randint(0, 1),
@@ -110,7 +110,7 @@ betaPolicy = Policy('beta_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                               'A.3_DikeIncrease 2': random.randint(0, 10),
                                               'A.4_DikeIncrease 2': random.randint(0, 10),
                                               'A.5_DikeIncrease 2': random.randint(0, 10),
-                                              'EWS_DaysToThreat': random.randint(0, 15)})
+                                              'EWS_DaysToThreat': random.randint(0, 4)})
 gammaPolicy = Policy('gamma_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                                 '3_RfR 1': random.randint(0, 1),
                                                 '3_RfR 2': random.randint(0, 1),
@@ -129,22 +129,22 @@ gammaPolicy = Policy('gamma_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                                 'A.3_DikeIncrease 2': random.randint(0, 10),
                                                 'A.4_DikeIncrease 2': random.randint(0, 10),
                                                 'A.5_DikeIncrease 2': random.randint(0, 10),
-                                                'EWS_DaysToThreat': random.randint(0, 15)})
+                                                'EWS_DaysToThreat': random.randint(0, 4)})
 def main():
-    n_scenarios = 10000
+    n_scenarios = 100
 
     ema_logging.log_to_stderr(ema_logging.INFO)
 
     # Model Imports
     from problem_formulation import get_model_for_problem_formulation
 
-    dike_model, time_step = get_model_for_problem_formulation(7)
+    dike_model, time_step = get_model_for_problem_formulation(6)
 
-    with MultiprocessingEvaluator(dike_model,n_processes=7) as evaluator:
+    with MultiprocessingEvaluator(dike_model) as evaluator:
         experiments, outcomes = evaluator.perform_experiments(scenarios=n_scenarios, policies=[nullPolicy, alphaPolicy, betaPolicy, gammaPolicy])
 
     # Save the results
-    save_results([experiments, outcomes], './results/10000Scenarios_4RandomPolicies_PF7.tar.gz')
+    save_results([experiments, outcomes], './results/100Scenarios_4RandomPolicies_PF6.tar.gz')
 
 if __name__ == '__main__':
     freeze_support()
