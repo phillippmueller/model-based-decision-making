@@ -27,7 +27,6 @@ def sum_over(*args):
 
     return sum(numbers)
 
-
 def sum_over_time(*args):
     data = np.asarray(args)
     summed = data.sum(axis=0)
@@ -429,8 +428,6 @@ def get_model_for_problem_formulation(problem_formulation_id):
         raise TypeError("unknown identifier")
 
     return dike_model, function.planning_steps
-
-
 
 
 if __name__ == "__main__":
