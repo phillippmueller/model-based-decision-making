@@ -173,29 +173,28 @@ class DikeNetwork:
             G.nodes["EWS"]["DaysToThreat"]
         ]
 
-        # Dictionary storing outputs:
-        data = defaultdict(list)
-
+ # Dictionary storing outputs:
+        data = {}
+        
         for s in self.planning_steps:
             for Qpeak in Qpeaks:
-                node = G.nodes["A.0"]
-                waveshape_id = node["ID flood wave shape"]
+                node = G.nodes['A.0']
+                waveshape_id = node['ID flood wave shape']
 
-                time = np.arange(
-                    0, node["Qevents_shape"].loc[waveshape_id].shape[0], timestep
-                )
-                node["Qout"] = Qpeak * node["Qevents_shape"].loc[waveshape_id]
+                time = np.arange(0, node['Qevents_shape'].loc[waveshape_id].shape[0],
+                             timestep)
+                node['Qout'] = Qpeak * node['Qevents_shape'].loc[waveshape_id]
 
                 # Initialize hydrological event:
                 for key in dikelist:
                     node = G.nodes[key]
 
-                    Q_0 = int(G.nodes["A.0"]["Qout"][0])
+                    Q_0 = int(G.nodes['A.0']['Qout'][0])
 
                     self._initialize_hydroloads(node, time, Q_0)
                     # Calculate critical water level: water above which failure
                     # occurs
-                    node["critWL"] = Lookuplin(node[f"fnew {s}"], 1, 0, node["pfail"])
+                    node['critWL'] = Lookuplin(node[f'fnew {s}'], 1, 0, node['pfail'])
 
                 # Run the simulation:
                 # Run over the discharge wave:
@@ -204,90 +203,73 @@ class DikeNetwork:
                     for n in range(0, len(dikelist)):
                         # Select current node:
                         node = G.nodes[dikelist[n]]
-                        if node["type"] == "dike":
+                        if node['type'] == 'dike':
 
                             # Muskingum parameters:
-                            C1 = node["C1"]
-                            C2 = node["C2"]
-                            C3 = node["C3"]
+                            C1 = node['C1']
+                            C2 = node['C2']
+                            C3 = node['C3']
 
-                            prec_node = G.nodes[node["prec_node"]]
+                            prec_node = G.nodes[node['prec_node']]
                             # Evaluate Q coming in a given node at time t:
-                            node["Qin"][t] = Muskingum(
-                                C1,
-                                C2,
-                                C3,
-                                prec_node["Qout"][t],
-                                prec_node["Qout"][t - 1],
-                                node["Qin"][t - 1],
-                            )
+                            node['Qin'][t] = Muskingum(C1, C2, C3,
+                                                   prec_node['Qout'][t],
+                                                   prec_node['Qout'][t - 1],
+                                                   node['Qin'][t - 1])
 
                             # Transform Q in water levels:
-                            node["wl"][t] = Lookuplin(
-                                node["rnew"], 0, 1, node["Qin"][t]
-                            )
+                            node['wl'][t] = Lookuplin(
+                                            node['rnew'], 0, 1, node['Qin'][t])
 
                             # Evaluate failure and, in case, Q in the floodplain and
                             # Q left in the river:
-                            res = dikefailure(
-                                self.sb,
-                                node["Qin"][t],
-                                node["wl"][t],
-                                node["hbas"][t],
-                                node["hground"],
-                                node["status"][t - 1],
-                                node["Bmax"],
-                                node["Brate"],
-                                time[t],
-                                node["tbreach"],
-                                node["critWL"],
-                            )
+                            res = dikefailure(self.sb,
+                                          node['Qin'][t], node['wl'][t],
+                                          node['hbas'][t], node['hground'],
+                                          node['status'][t - 1], node['Bmax'],
+                                          node['Brate'], time[t],
+                                          node['tbreach'], node['critWL'])
 
-                            node["Qout"][t] = res[0]
-                            node["Qpol"][t] = res[1]
-                            node["status"][t] = res[2]
-                            node["tbreach"] = res[3]
+                            node['Qout'][t] = res[0]
+                            node['Qpol'][t] = res[1]
+                            node['status'][t] = res[2]
+                            node['tbreach'] = res[3]
 
                             # Evaluate the volume inside the floodplain as the integral
                             # of Q in time up to time t.
-                            node["cumVol"][t] = (
-                                np.trapz(node["Qpol"]) * self.timestepcorr
-                            )
+                            node['cumVol'][t] = np.trapz(
+                                    node['Qpol']) * self.timestepcorr
 
-                            Area = Lookuplin(node["table"], 4, 0, node["wl"][t])
-                            node["hbas"][t] = node["cumVol"][t] / float(Area)
+                            Area = Lookuplin(node['table'], 4, 0, node['wl'][t])
+                            node['hbas'][t] = node['cumVol'][t] / float(Area)
 
-                        elif node["type"] == "downstream":
-                            node["Qin"] = G.nodes[dikelist[n - 1]]["Qout"]
+                        elif node['type'] == 'downstream':
+                            node['Qin'] = G.nodes[dikelist[n - 1]]['Qout']
 
                 # Iterate over the network and store outcomes of interest for a
                 # given event
                 for dike in self.dikelist:
                     node = G.nodes[dike]
 
-                    # If breaches occured:
-                    if node["status"][-1] == True:
+                # If breaches occured:
+                    if node['status'][-1] == True:
                         # Losses per event:
-                        node[f"losses {s}"].append(
-                            Lookuplin(node["table"], 6, 4, np.max(node["wl"]))
-                        )
+                        node[f'losses {s}'].append(Lookuplin(node['table'],
+                                                    6, 4, np.max(node['wl'])))
 
-                        node[f"deaths {s}"].append(
-                            Lookuplin(node["table"], 6, 3, np.max(node["wl"]))
-                            * (1 - G.nodes["EWS"]["evacuation_percentage"])
-                        )
+                        node[f'deaths {s}'].append(Lookuplin(node['table'],
+                                                    6, 3, np.max(node['wl'])) * (
+                                    1 - G.nodes['EWS']['evacuation_percentage']))
 
-                        node[f"evacuation_costs {s}"].append(
-                            cost_evacuation(
-                                Lookuplin(node["table"], 6, 5, np.max(node["wl"]))
-                                * G.nodes["EWS"]["evacuation_percentage"],
-                                G.nodes["EWS"]["DaysToThreat"],
-                            )
-                        )
+                        node[f'evacuation_costs {s}'].append(
+                                cost_evacuation(Lookuplin(
+                                node['table'], 6, 5, np.max(node['wl'])
+                                ) * G.nodes['EWS']['evacuation_percentage'],
+                                G.nodes['EWS']['DaysToThreat']))
                     else:
-                        node[f"losses {s}"].append(0)
-                        node[f"deaths {s}"].append(0)
-                        node[f"evacuation_costs {s}"].append(0)
+                        node[f'losses {s}'].append(0)
+                        node[f'deaths {s}'].append(0)
+                        node[f'evacuation_costs {s}'].append(0)
 
             EECosts = []
             # Iterate over the network,compute and store ooi over all events
@@ -295,26 +277,26 @@ class DikeNetwork:
                 node = G.nodes[dike]
 
                 # Expected Annual Damage:
-                EAD = np.trapz(node[f"losses {s}"], self.p_exc)
+                EAD = np.trapz(node[f'losses {s}'], self.p_exc)
                 # Discounted annual risk per dike ring:
-                disc_EAD = np.sum(
-                    discount(
-                        EAD, rate=G.nodes[f"discount rate {s}"]["value"], n=self.y_step
-                    )
-                )
+                disc_EAD = np.sum(discount(EAD, rate=G.nodes[
+                        f'discount rate {s}']['value'], n=self.y_step))
 
                 # Expected Annual number of deaths:
-                END = np.trapz(node[f"deaths {s}"], self.p_exc)
+                END = np.trapz(node[f'deaths {s}'], self.p_exc)
 
                 # Expected Evacuation costs: depend on the event, the higher
                 # the event, the more people you have got to evacuate:
-                EECosts.append(np.trapz(node[f"evacuation_costs {s}"], self.p_exc))
+                EECosts.append(np.trapz(node[f'evacuation_costs {s}'], self.p_exc))
 
-                data[f"{dike}_Expected Annual Damage"].append(disc_EAD)
-                data[f"{dike}_Expected Number of Deaths"].append(END)
-                data[f"{dike}_Dike Investment Costs"].append(node[f"dikecosts {s}"])
+                data.update({f'{dike}_Expected Annual Damage {s}': disc_EAD,
+                         f'{dike}_Expected Number of Deaths {s}': END,
+                         '{}_Dike Investment Costs {}'.format(dike,s
+                                              ): node[f'dikecosts {s}']})
 
-            data[f"RfR Total Costs"].append(G.nodes[f"RfR_projects {s}"]["cost"])
-            data[f"Expected Evacuation Costs"].append(np.sum(EECosts))
+            data.update({f'RfR Total Costs {s}': G.nodes[
+                                f'RfR_projects {s}']['cost'.format(s)]})
+            data.update({f'Expected Evacuation Costs {s}': np.sum(EECosts)})
 
+        data = {k:float(v) for k, v in data.items()}
         return data
