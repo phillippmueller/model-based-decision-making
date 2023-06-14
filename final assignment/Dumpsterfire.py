@@ -34,9 +34,11 @@ uncertainties = copy.deepcopy(dike_model.uncertainties)
 levers = copy.deepcopy(dike_model.levers)
 
 # Create a reference policy where no action is taken
-nullPolicy = Policy('null_policy', **{'0_RfR 0': 0,
-                                       '0_RfR 1': 0,
-                                       '0_RfR 2': 0,
+nullPolicy = Policy('null_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
+                                  '1_RfR 0':0,'1_RfR 1':0,'1_RfR 2':0,
+                                  '2_RfR 0':0,'2_RfR 1':0,'2_RfR 2':0,
+                                  '3_RfR 0':0,'3_RfR 1':0,'3_RfR 2':0,
+                                  '4_RfR 0':0,'4_RfR 1':0,'4_RfR 2':0,
                                        'A.1_DikeIncrease 0': 0,
                                        'A.2_DikeIncrease 0': 0,
                                        'A.3_DikeIncrease 0': 0,
@@ -72,9 +74,13 @@ def main():
 '''
 import random  # for randomly deciding to switch policy on/ off
 
-alphaPolicy = Policy('alpha_random_policy', **{'3_RfR 0': random.randint(0, 1),
+alphaPolicy = Policy('alpha_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
+                                                '1_RfR 0':0,'1_RfR 1':0,'1_RfR 2':0,
+                                                '2_RfR 0':0,'2_RfR 1':0,'2_RfR 2':0,
+                                                '3_RfR 0': random.randint(0, 1),
                                                 '3_RfR 1': random.randint(0, 1),
                                                 '3_RfR 2': random.randint(0, 1),
+                                                '4_RfR 0':0,'4_RfR 1':0,'4_RfR 2':0,
                                                 'A.1_DikeIncrease 0': random.randint(0, 10),
                                                 'A.2_DikeIncrease 0': random.randint(0, 10),
                                                 'A.3_DikeIncrease 0': random.randint(0, 10),
@@ -92,9 +98,13 @@ alphaPolicy = Policy('alpha_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                                 'A.5_DikeIncrease 2': random.randint(0, 10),
                                                 'EWS_DaysToThreat': random.randint(0, 4)})
 
-betaPolicy = Policy('beta_random_policy', **{'3_RfR 0': random.randint(0, 1),
-                                              '3_RfR 1': random.randint(0, 1),
-                                              '3_RfR 2': random.randint(0, 1),
+betaPolicy = Policy('beta_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
+                                                '1_RfR 0':0,'1_RfR 1':0,'1_RfR 2':0,
+                                                '2_RfR 0':0,'2_RfR 1':0,'2_RfR 2':0,
+                                                '3_RfR 0': random.randint(0, 1),
+                                                '3_RfR 1': random.randint(0, 1),
+                                                '3_RfR 2': random.randint(0, 1),
+                                                '4_RfR 0':0,'4_RfR 1':0,'4_RfR 2':0,
                                               'A.1_DikeIncrease 0': random.randint(0, 10),
                                               'A.2_DikeIncrease 0': random.randint(0, 10),
                                               'A.3_DikeIncrease 0': random.randint(0, 10),
@@ -111,9 +121,13 @@ betaPolicy = Policy('beta_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                               'A.4_DikeIncrease 2': random.randint(0, 10),
                                               'A.5_DikeIncrease 2': random.randint(0, 10),
                                               'EWS_DaysToThreat': random.randint(0, 4)})
-gammaPolicy = Policy('gamma_random_policy', **{'3_RfR 0': random.randint(0, 1),
+gammaPolicy = Policy('gamma_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
+                                                '1_RfR 0':0,'1_RfR 1':0,'1_RfR 2':0,
+                                                '2_RfR 0':0,'2_RfR 1':0,'2_RfR 2':0,
+                                                '3_RfR 0': random.randint(0, 1),
                                                 '3_RfR 1': random.randint(0, 1),
                                                 '3_RfR 2': random.randint(0, 1),
+                                                '4_RfR 0':0,'4_RfR 1':0,'4_RfR 2':0,
                                                 'A.1_DikeIncrease 0': random.randint(0, 10),
                                                 'A.2_DikeIncrease 0': random.randint(0, 10),
                                                 'A.3_DikeIncrease 0': random.randint(0, 10),
@@ -131,7 +145,7 @@ gammaPolicy = Policy('gamma_random_policy', **{'3_RfR 0': random.randint(0, 1),
                                                 'A.5_DikeIncrease 2': random.randint(0, 10),
                                                 'EWS_DaysToThreat': random.randint(0, 4)})
 def main():
-    n_scenarios = 100
+    n_scenarios = 10000
 
     ema_logging.log_to_stderr(ema_logging.INFO)
 
@@ -144,7 +158,7 @@ def main():
         experiments, outcomes = evaluator.perform_experiments(scenarios=n_scenarios, policies=[nullPolicy, alphaPolicy, betaPolicy, gammaPolicy])
 
     # Save the results
-    save_results([experiments, outcomes], './results/100Scenarios_4RandomPolicies_PF6.tar.gz')
+    save_results([experiments, outcomes], './results/10000Scenarios_4RandomPolicies_PF6.tar.gz')
 
 if __name__ == '__main__':
     freeze_support()
