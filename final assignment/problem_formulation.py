@@ -415,6 +415,129 @@ def get_model_for_problem_formulation(problem_formulation_id):
                         variable_name=[var for var in evacuation_costs],
                         function=sum_over, kind=ScalarOutcome.MINIMIZE)]
 
+    # Specific to Gelderland Province
+    elif problem_formulation_id == 7:
+        
+        damage_a1_a2 = []
+        damage_a3 = []
+        casualties_a1_a2 = []        
+        casualties_a3 = []
+        dike_costs = []
+        rfr_costs = []
+        evacuation_costs = []
+        
+        outcomes = []
+
+ 
+            
+            #Damage  
+        damage_a1_a2.extend(['A.1_Expected Annual Damage', 'A.2_Expected Annual Damage'])
+        damage_a3.extend(['A.3_Expected Annual Damage'])
+
+            #Casualties
+        casualties_a1_a2.extend(['A.1_Expected Number of Deaths', 'A.2_Expected Number of Deaths'])
+        casualties_a3.extend(['A.3_Expected Number of Deaths'])
+
+            #Costs
+        for dike in function.dikelist:
+            dike_costs.extend(['{}_Dike Investment Costs'.format(dike)
+                                                for dike in function.dikelist])
+
+
+        rfr_costs.extend(['RfR Total Costs'])
+        evacuation_costs.extend(['Expected Evacuation Costs'])
+
+        dike_model.outcomes = [
+                    ScalarOutcome('A1_2 Aggr Expected Annual Damage',
+                          variable_name=[var for var in damage_a1_a2],
+                          function=sum_over, kind = ScalarOutcome.MINIMIZE),
+
+                ScalarOutcome('A3 Expected Annual Damage',
+                          variable_name=[var for var in damage_a3],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+
+                ScalarOutcome('A1_2 Aggr Expected Number of Deaths',
+                          variable_name=[var for var in casualties_a1_a2],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('A3 Aggr Expected Number of Deaths',
+                          variable_name=[var for var in casualties_a3],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('A1_5 Dike Investment Costs',
+                          variable_name=[var for var in dike_costs],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('Room for River Investment Costs',
+                          variable_name=[var for var in rfr_costs],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('Evacuation Costs',
+                          variable_name=[var for var in evacuation_costs],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE)]
+
+        # 7-Objectives PF Holistic View:
+    elif problem_formulation_id == 8:
+   
+        casualties = []
+        rfr_costs = []
+        evacuation_costs = []        
+        gelderland_dike_cost = []
+        overijssel_dike_cost = []
+        gelderland_expected_damage = []
+        overijssel_expected_damage = []
+        
+        outcomes = []
+
+
+            
+            #Damage
+        gelderland_expected_damage.extend(['A.1_Expected Annual Damage', 'A.2_Expected Annual Damage', 'A.3_Expected Annual Damage'])
+        overijssel_expected_damage.extend(['A.4_Expected Annual Damage', 'A.5_Expected Annual Damage'])
+            
+            #Casualties
+        casualties.extend(['A.1_Expected Number of Deaths', 'A.2_Expected Number of Deaths', 'A.3_Expected Number of Deaths',
+                              'A.4_Expected Number of Deaths', 'A.5_Expected Number of Deaths'])
+
+            #Costs
+        for dike in function.dikelist:
+            gelderland_dike_cost.extend(['{}_Dike Investment Costs'.format(dike)
+                                                for dike in function.dikelist[0:len(function.dikelist)-1]])
+            overijssel_dike_cost.extend(['{}_Dike Investment Costs'.format(dike)
+                                                for dike in function.dikelist[4:5]])
+
+
+        rfr_costs.extend(['RfR Total Costs'])
+        evacuation_costs.extend(['Expected Evacuation Costs'])
+
+        dike_model.outcomes = [
+                    ScalarOutcome('Gelderland Expected Annual Damage',
+                          variable_name=[var for var in gelderland_expected_damage],
+                          function=sum_over, kind = ScalarOutcome.MINIMIZE),
+
+                ScalarOutcome('Overijssel Expected Annual Damage',
+                          variable_name=[var for var in overijssel_expected_damage],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+
+                ScalarOutcome('Expected Number of Deaths',
+                          variable_name=[var for var in casualties],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('Gelderland Dike Cost',
+                          variable_name=[var for var in gelderland_dike_cost],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('Overijssel Dike Cost',
+                          variable_name=[var for var in overijssel_dike_cost],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('Room for River Investment Costs',
+                          variable_name=[var for var in rfr_costs],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE),
+                          
+                ScalarOutcome('Evacuation Costs',
+                          variable_name=[var for var in evacuation_costs],
+                          function=sum_over, kind=ScalarOutcome.MINIMIZE)]
 
     else:
         raise TypeError("unknown identifier")
