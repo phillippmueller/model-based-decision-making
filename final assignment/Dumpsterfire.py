@@ -10,8 +10,6 @@ from ema_workbench.util import ema_logging, save_results, load_results
 
 ema_logging.log_to_stderr(ema_logging.INFO)
 
-# Problem formulation 6 is specific to Dike Ring 3
-dike_model, planning_steps = get_model_for_problem_formulation(6)
 # General libraries
 import copy
 
@@ -24,14 +22,15 @@ from ema_workbench.util import ema_logging, save_results
 # Import problem formulation
 from problem_formulation import get_model_for_problem_formulation
 
-ema_logging.log_to_stderr(ema_logging.INFO)
-# define the problem formulation between 0 and 9
-# Problem formulation 6 is specific to Dike Ring 3
-dike_model, planning_steps = get_model_for_problem_formulation(6)
+dike_model, planning_steps = get_model_for_problem_formulation(1)
 
 # Set uncertainties and levers variables
 uncertainties = copy.deepcopy(dike_model.uncertainties)
 levers = copy.deepcopy(dike_model.levers)
+
+
+
+ema_logging.log_to_stderr(ema_logging.INFO)
 
 # Create a reference policy where no action is taken
 nullPolicy = Policy('null_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
@@ -54,26 +53,26 @@ nullPolicy = Policy('null_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
                                        'A.3_DikeIncrease 2': 0,
                                        'A.4_DikeIncrease 2': 0,
                                        'A.5_DikeIncrease 2': 0,
-                                       'EWS_DaysToThreat': 0})
-              
-'''
-def main():
-    n_scenarios = 100
+                                       'EWS_DaysToThreat': 0})              
 
+def main():
+    n_scenarios = 5000
+    # define the problem formulation between 0 and 9
+    # Problem formulation 6 is specific to Dike Ring 3
+    
     ema_logging.log_to_stderr(ema_logging.INFO)
 
     with MultiprocessingEvaluator(dike_model) as evaluator:
         experiments, outcomes = evaluator.perform_experiments(scenarios=n_scenarios, policies=nullPolicy)
 
     # Save the results
-    save_results([experiments, outcomes], './results/100Scenarios_NullPolicy_PF6.tar.gz')
+    save_results([experiments, outcomes], './results/5000Scenarios_NullPolicy_PF1.tar.gz')
 
 # Create a policy where action is taken randomly
 # compare the performance of that policy to the previously computed null_policy
 
 '''
 import random  # for randomly deciding to switch policy on/ off
-
 alphaPolicy = Policy('alpha_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
                                                 '1_RfR 0':0,'1_RfR 1':0,'1_RfR 2':0,
                                                 '2_RfR 0':0,'2_RfR 1':0,'2_RfR 2':0,
@@ -121,6 +120,7 @@ betaPolicy = Policy('beta_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0
                                               'A.4_DikeIncrease 2': random.randint(0, 10),
                                               'A.5_DikeIncrease 2': random.randint(0, 10),
                                               'EWS_DaysToThreat': random.randint(0, 4)})
+
 gammaPolicy = Policy('gamma_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2':0,
                                                 '1_RfR 0':0,'1_RfR 1':0,'1_RfR 2':0,
                                                 '2_RfR 0':0,'2_RfR 1':0,'2_RfR 2':0,
@@ -144,6 +144,8 @@ gammaPolicy = Policy('gamma_random_policy', **{'0_RfR 0':0,'0_RfR 1':0,'0_RfR 2'
                                                 'A.4_DikeIncrease 2': random.randint(0, 10),
                                                 'A.5_DikeIncrease 2': random.randint(0, 10),
                                                 'EWS_DaysToThreat': random.randint(0, 4)})
+
+                                
 def main():
     n_scenarios = 1000
 
@@ -158,7 +160,8 @@ def main():
         experiments, outcomes = evaluator.perform_experiments(scenarios=n_scenarios, policies=[nullPolicy, alphaPolicy, betaPolicy, gammaPolicy])
 
     # Save the results
-    save_results([experiments, outcomes], './results/1000Scenarios_4Random_Policies_PF6.tar.gz')
+    save_results([experiments, outcomes], './results/1000Scenarios_4RandomPolicies_PF7.tar.gz')
+'''
 
 if __name__ == '__main__':
     freeze_support()
