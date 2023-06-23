@@ -3,7 +3,9 @@ Project Structure
 The project repository is organized as follows:
 
 data/: Contains input data files required for the model.
+
 results/: Stores the results obtained from running the model.
+
 plots/: Stores the graphs obtained from running the model.
 
 README.md: This file, providing an overview of the project and instructions.
